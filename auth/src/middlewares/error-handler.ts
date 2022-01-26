@@ -11,14 +11,11 @@ export const errorHandler = (
 ) => {
   // check error type and mapping to the format we wanted {message, field}
   if (err instanceof RequestValidationError) {
-    const formattedErrors = err.errors.map((error) => {
-      return { message: error.msg, field: error.param };
-    });
-    return res.status(400).send({ errors: formattedErrors });
+    return res.status(400).send({ errors: err.serializeErrors() });
   }
 
   if (err instanceof DatabaseConnectionError) {
-    return res.status(500).send({ errors: [{ message: err.reason }] });
+    return res.status(500).send({ errors: err.serializeErrors() });
   }
 
   // generic error
