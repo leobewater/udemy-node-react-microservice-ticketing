@@ -1,9 +1,13 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
+import request from 'supertest';
 import { app } from '../app';
 
 let mongo: any;
 
+/*
+ * Test hooks
+ */
 // create in-memory mongodb server before all tests
 beforeAll(async () => {
   // hardcode env vars for testing
@@ -29,3 +33,27 @@ afterAll(async () => {
   await mongo.stop();
   await mongoose.connection.close();
 });
+
+/*
+ * Global Test Functions
+ */
+declare global {
+  var signin: () => Promise<string[]>;
+}
+
+global.signin = async () => {
+  const email = 'test@test.com';
+  const password = 'password';
+
+  const response = await request(app)
+    .post('/api/users/signup')
+    .send({
+      email,
+      password,
+    })
+    .expect(201);
+
+  const cookie = response.get('Set-Cookie');
+
+  return cookie;
+};
