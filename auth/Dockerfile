@@ -1,4 +1,4 @@
-FROM node:17.4.0-alpine
+FROM amd64/node:alpine
 
 WORKDIR /app
 COPY package.json ./
