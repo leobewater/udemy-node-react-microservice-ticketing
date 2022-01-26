@@ -39,6 +39,7 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 };
 
 // Mongoose User model
+// the <> is the generic function and passing argument to the function model
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 
 // Test TS validation
