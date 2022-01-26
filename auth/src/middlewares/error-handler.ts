@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { RequestValidationError } from '../errors/request-validation-error';
-import { DatabaseConnectionError } from '../errors/database-connection-error';
+import { CustomError } from '../errors/custom-error';
 
 // standardize all API error responses and auto picks up when errors were thrown
 export const errorHandler = (
@@ -10,11 +9,7 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   // check error type and mapping to the format we wanted {message, field}
-  if (err instanceof RequestValidationError) {
-    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
-  }
-
-  if (err instanceof DatabaseConnectionError) {
+  if (err instanceof CustomError) {
     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
 
