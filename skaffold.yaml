@@ -4,16 +4,16 @@ deploy:
   kubectl:
     manifests:
       - "./infra/k8s/*"
-# don't push to docker hub after build
+## don't push to docker hub after build
 build:
-  #local:
-  #  push: false
-  # link with Google Cloud Build
-  googleCloudBuild:
-    projectId: ticketing-dev-339410
+  local:
+    push: false
+  ## link with Google Cloud Build
+  #googleCloudBuild:
+  #  projectId: ticketing-dev-339410
   artifacts:
-    #- image: lcheung/auth
-    - image: us.gcr.io/ticketing-dev-339410/auth
+    #- image: us.gcr.io/ticketing-dev-339410/auth
+    - image: lcheung/auth
       context: auth
       docker:
         dockerfile: Dockerfile

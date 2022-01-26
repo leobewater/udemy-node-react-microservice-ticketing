@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: auth
-          # image: lcheung/auth
-          image: us.gcr.io/ticketing-dev-339410/auth
+          image: lcheung/auth
+          #image: us.gcr.io/ticketing-dev-339410/auth
 ---
 apiVersion: v1
 kind: Service
