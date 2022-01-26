@@ -18,10 +18,11 @@ export const errorHandler = (
   }
 
   if (err instanceof DatabaseConnectionError) {
-    console.log('handling this error as a db connection error');
+    return res.status(500).send({ errors: [{ message: err.reason }] });
   }
 
+  // generic error
   res.status(400).send({
-    message: err.message,
+    errors: [{ message: 'Something went wrong' }],
   });
 };
