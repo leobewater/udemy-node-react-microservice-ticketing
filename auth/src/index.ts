@@ -1,5 +1,6 @@
 import express from 'express';
 import { json } from 'body-parser';
+import 'express-async-errors';
 
 import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
@@ -16,11 +17,17 @@ app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);
-// 404 error
-app.get('*', () => {
+// handle async error using next() without the express-async-errors plugin
+// app.all('*', async (req, res, next) => {
+//     next(new NotFoundError());
+// });
+
+// 404 error for all actions and async with plugin express-async-errors
+app.all('*', async (req, res) => {
   throw new NotFoundError();
 });
 
+  
 // middlewares
 app.use(errorHandler);
 
