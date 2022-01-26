@@ -49,7 +49,7 @@ router.post(
       'asdf'
     );
 
-    // store it on the session object
+    // store it on the cookie session object
     req.session = {
       jwt: userJwt,
     };
