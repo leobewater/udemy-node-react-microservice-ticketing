@@ -22,27 +22,42 @@ interface UserDoc extends mongoose.Document {
 }
 
 // Mongoose User schema
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    reuired: true,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      reuired: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    // mapping and hide mongoose returned fields
+    toJSON: {
+      transform(doc, ret) {
+        // remap "_id" to "id"
+        ret.id = ret._id;
+        // hide "_id", "password" and "__v" from showing in API response
+        delete ret._id;
+        delete ret.password; 
+        delete ret.__v;
+      }
+    },
+  }
+);
 
 // mongoose middleware function before saving, can't use arrow function
-userSchema.pre('save', async function(done) {
+userSchema.pre('save', async function (done) {
   // check if password is modified, skip re-saving the already hashed password
   // new record is considered modified
-  if(this.isModified('password')) {
+  if (this.isModified('password')) {
     const hashed = await Password.toHash(this.get('password'));
     this.set('password', hashed);
   }
   done();
-})
+});
 
 // add custom function "build" to User Schema, so we can use User.build({})
 // join typescript interface and moongose User together for validation
