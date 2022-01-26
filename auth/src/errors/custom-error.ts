@@ -1,7 +1,7 @@
 export abstract class CustomError extends Error {
   abstract statusCode: number;
 
-  constructor(message:string) {
+  constructor(message: string) {
     // super() calling Error constructor
     super(message);
 
@@ -14,4 +14,3 @@ export abstract class CustomError extends Error {
     field?: string;
   }[];
 }
-

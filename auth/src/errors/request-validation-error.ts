@@ -2,7 +2,7 @@ import { ValidationError } from 'express-validator';
 import { CustomError } from './custom-error';
 
 // build own custom error
-export class RequestValidationError extends CustomError  {
+export class RequestValidationError extends CustomError {
   statusCode = 400;
 
   // using private/public = setting this.errors = errors
@@ -15,11 +15,10 @@ export class RequestValidationError extends CustomError  {
 
   // mapping to the format we wanted {message, field}
   serializeErrors() {
-    return this.errors.map(err => {
+    return this.errors.map((err) => {
       return { message: err.msg, field: err.param };
     });
   }
-
 }
 
 // to use
