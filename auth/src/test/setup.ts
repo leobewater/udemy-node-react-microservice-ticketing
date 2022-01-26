@@ -6,13 +6,8 @@ let mongo: any;
 
 // create in-memory mongodb server before all tests
 beforeAll(async () => {
-  mongo = new MongoMemoryServer();
-  const mongoUri = await mongo.getUri();
-  
-  // await mongoose.connect(mongoUri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
+  mongo = await MongoMemoryServer.create();
+  const mongoUri = mongo.getUri();
 
   await mongoose.connect(mongoUri);
 });

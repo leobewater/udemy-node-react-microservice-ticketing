@@ -12,9 +12,9 @@ const start = async () => {
   try {
     // using deployment host name and connect to auth db
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
-    console.log('Conncted to mongodb');
+    console.log('Connected to MongoDb');
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 
   app.listen(3000, () => {
