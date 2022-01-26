@@ -1,6 +1,11 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import jwt from 'jsonwebtoken';
+
+import { User } from '../models/user';
 import { validateRequest } from '../middlewares/validate-request';
+import { BadRequestError } from '../errors/bad-request-error';
+import { Password } from '../services/password';
 
 const router = express.Router();
 
@@ -15,16 +20,39 @@ router.post(
       .withMessage('You must provide a password'),
   ],
   validateRequest,
-  (req: Request, res: Response) => {
-    // const { email, password } = req.body;
+  async (req: Request, res: Response) => {
+    const { email, password } = req.body;
 
-    // // check for user existence
-    // const existingUser = await User.findOne({ email });
-    // if (existingUser) {
-    //   throw new BadRequestError('Email in use');
-    // }
+    // check for user existence
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      throw new BadRequestError('Invalid credentials');
+    }
 
-    res.send('sign in');
+    // check user password
+    const passwordsMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+    if (!passwordsMatch) {
+      throw new BadRequestError('Invalid credentials');
+    }
+
+    // generate JWT with private key
+    const userJwt = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+      },
+      process.env.JWT_KEY! // ! = ignore TS check
+    );
+
+    // store it on the cookie session object
+    req.session = {
+      jwt: userJwt,
+    };
+
+    res.status(200).send(existingUser);
   }
 );
 
