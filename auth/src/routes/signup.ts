@@ -46,7 +46,7 @@ router.post(
         id: user.id,
         email: user.email,
       },
-      'asdf'
+      process.env.JWT_KEY! // ! = ignore TS check
     );
 
     // store it on the cookie session object
