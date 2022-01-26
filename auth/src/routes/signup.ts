@@ -9,7 +9,7 @@ const router = express.Router();
 router.post(
   '/api/users/signup',
   [
-    // using express-validator
+    // using express-validator for request validation
     body('email').isEmail().withMessage('Email must be valid'),
 
     body('password')
@@ -33,12 +33,10 @@ router.post(
       throw new BadRequestError('Email in use');
     }
 
-    // hash the password
-
     // create new user
     const user = await User.build({ email, password });
 
-    // save to db
+    // run user pre-save hook and save to db
     await user.save();
 
     // return cookie/jwt
