@@ -41,6 +41,8 @@ router.post(
     // save to db
     await user.save();
 
+    // return cookie/jwt
+
     res.status(201).send(user);
   }
 );

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Password } from '../services/password';
 
 // an interface that describes the properties that are required to create a new user
 interface UserAttrs {
@@ -32,6 +33,17 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// mongoose middleware function before saving, can't use arrow function
+userSchema.pre('save', async function(done) {
+  // check if password is modified, skip re-saving the already hashed password
+  // new record is considered modified
+  if(this.isModified('password')) {
+    const hashed = await Password.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+  done();
+})
+
 // add custom function "build" to User Schema, so we can use User.build({})
 // join typescript interface and moongose User together for validation
 userSchema.statics.build = (attrs: UserAttrs) => {
@@ -50,6 +62,5 @@ const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 // });
 // user.email = '';
 // user.password = '';
-
 
 export { User };
