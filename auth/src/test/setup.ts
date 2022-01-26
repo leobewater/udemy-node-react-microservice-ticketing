@@ -6,13 +6,16 @@ let mongo: any;
 
 // create in-memory mongodb server before all tests
 beforeAll(async () => {
+  // hardcode env vars for testing
+  process.env.JWT_KEY = 'asdfasdf';
+
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
 
   await mongoose.connect(mongoUri);
 });
 
-// delete all database before running each test
+// delete all database collections before running each test
 beforeEach(async () => {
   const collections = await mongoose.connection.db.collections();
 
