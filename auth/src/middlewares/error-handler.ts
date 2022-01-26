@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-// standardize all API error responses
+// standardize all API error responses and auto picks up when errors were thrown
 export const errorHandler = (
   err: Error,
   req: Request,
