@@ -26,7 +26,7 @@ spec:
     app: auth-mongo
   type: ClusterIP
   ports:
-  - name: auth-mongo
+  - name: db
     protocol: TCP
     port: 27017
-    targetPort: 3000
+    targetPort: 27017
