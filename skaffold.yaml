@@ -6,10 +6,14 @@ deploy:
       - "./infra/k8s/*"
 # don't push to docker hub after build
 build:
-  local:
-    push: false
+  #local:
+  #  push: false
+  # link with Google Cloud Build
+  googleCloudBuild:
+    projectId: ticketing-dev-339410
   artifacts:
-    - image: lcheung/auth
+    #- image: lcheung/auth
+    - image: us.gcr.io/ticketing-dev-339410/auth
       context: auth
       docker:
         dockerfile: Dockerfile
