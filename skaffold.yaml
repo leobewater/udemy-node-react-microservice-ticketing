@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2beta26 
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - "./infra/k8s/*"
+# don't push to docker hub after build
+build:
+  local:
+    push: false
+  artifacts:
+    - image: lcheung/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+            
+  
