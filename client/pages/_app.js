@@ -1,15 +1,12 @@
 // This is default page layout
 import 'bootstrap/dist/css/bootstrap.css';
 import buildClient from '../api/build-client';
+import Header from '../components/header';
 
-// const LandingPage = ({ currentUser }) => {
-//   return <h1>{currentUser ? 'You are signed in' : 'You are not signed in'}</h1>;
-// };
-
-const AppComponent = ({ Component, pageProps }) => {
+const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
-      <h1>Header!</h1>
+      <Header currentUser={currentUser} />
       <Component {...pageProps} />
     </div>
   );
@@ -18,6 +15,7 @@ const AppComponent = ({ Component, pageProps }) => {
 // getInitialProps() executes on the server side on the first load which fetches data once on the server side and pass them to the page components.
 AppComponent.getInitialProps = async (appContext) => {
   // console.log(appContext);
+
   const client = buildClient(appContext.ctx);
   const { data } = await client.get('/api/users/currentuser');
 
@@ -30,7 +28,10 @@ AppComponent.getInitialProps = async (appContext) => {
   // console.log(pageProps);
   // console.log(data);
 
-  return data;
+  return {
+    pageProps,
+    ...data,
+  };
 };
 
 export default AppComponent;
