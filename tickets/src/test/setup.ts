@@ -43,9 +43,9 @@ declare global {
 global.signin = () => {
   // Create a fake cookie, for reference, you can signup and find the currentUser cookie response
 
-  // Build a JWT payload. { id, email }
+  // Build a JWT payload and randomly generate the id. { id, email }
   const payload = {
-    id: '1234567',
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com',
   };
 
