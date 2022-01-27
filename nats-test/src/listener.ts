@@ -13,8 +13,11 @@ const stan = nats.connect('ticketing', clientId, {
 stan.on('connect', () => {
   console.log('Listener connected to NATS');
 
-  // listen to ticket:created topic/event
-  const subscription = stan.subscribe('ticket:created');
+  // listen to ticket:created topic/event with a Queue Group to avoid receiving duplicated message
+  const subscription = stan.subscribe(
+    'ticket:created',
+    'orders-service-queue-group'
+  );
 
   subscription.on('message', (msg: Message) => {
     const data = msg.getData();
