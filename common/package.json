@@ -1,15 +1,16 @@
 {
   "name": "@mmb8npm/common",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
-  "files": [
+  "files": [
     "build/**/*"
   ],
   "scripts": {
     "clean": "del ./build/*",
-    "build": "npm run clean && tsc"
+    "build": "npm run clean && tsc",
+    "pub": "npm version patch && npm run build && npm publish"
   },
   "keywords": [],
   "author": "",
