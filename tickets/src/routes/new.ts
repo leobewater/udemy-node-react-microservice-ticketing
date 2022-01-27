@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { requireAuth, validateRequest } from '@mmb8npm/common';
+import { Ticket } from '../models/ticket';
 
 const router = express.Router();
 
@@ -14,8 +15,18 @@ router.post(
     body('price').isFloat({ gt: 0 }).withMessage('Price must be great than 0'),
   ],
   validateRequest,
-  (req: Request, res: Response) => {
-    res.sendStatus(200);
+  async (req: Request, res: Response) => {
+    const { title, price } = req.body;
+
+    // save ticket to mongodb
+    const ticket = Ticket.build({
+      title,
+      price,
+      userId: req.currentUser!.id,
+    });
+    await ticket.save();
+
+    res.status(201).send(ticket);
   }
 );
 
