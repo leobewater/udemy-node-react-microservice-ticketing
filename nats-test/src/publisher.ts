@@ -1,8 +1,12 @@
 import nats from 'node-nats-streaming';
+import { randomBytes } from 'crypto';
 
 console.clear();
 
-const stan = nats.connect('ticketing', 'abc', {
+// ClientID - must be unique with multiple instances/publishers/listeners
+const clientId = randomBytes(4).toString('hex');
+
+const stan = nats.connect('ticketing', clientId, {
   url: 'http://localhost:4222',
 });
 

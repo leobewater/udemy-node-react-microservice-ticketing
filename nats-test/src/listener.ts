@@ -1,8 +1,12 @@
 import nats, { Message } from 'node-nats-streaming';
+import { randomBytes } from 'crypto';
 
 console.clear();
 
-const stan = nats.connect('ticketing', '123', {
+// ClientID - must be unique with multiple instances/publishers/listeners
+const clientId = randomBytes(4).toString('hex');
+
+const stan = nats.connect('ticketing', clientId, {
   url: 'http://localhost:4222',
 });
 
@@ -16,9 +20,7 @@ stan.on('connect', () => {
     const data = msg.getData();
     // check received data type
     if (typeof data === 'string') {
-      console.log(
-        `Received event #${msg.getSequence()}, with data:${data}`
-      );
+      console.log(`Received event #${msg.getSequence()}, with data:${data}`);
     }
   });
 });
