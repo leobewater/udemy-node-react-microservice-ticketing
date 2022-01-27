@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 
+// this method can only be used inside a react component
 export default ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
 
