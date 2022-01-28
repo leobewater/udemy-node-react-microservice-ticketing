@@ -1,16 +1,17 @@
 import mongoose from 'mongoose';
+import { OrderStatus } from '@mmb8npm/common';
 
 // Typescript interfaces
 interface OrderAttrs {
   userId: string;
-  status: string;
+  status: OrderStatus;
   expiresAt: Date;
   ticket: TicketDoc; // reference ticket model
 }
 
 interface OrderDoc extends mongoose.Document {
   userId: string;
-  status: string;
+  status: OrderStatus;
   expiresAt: Date;
   ticket: TicketDoc; // reference ticket model
 }
@@ -35,8 +36,8 @@ const orderSchema = new mongoose.Schema(
     },
     ticket: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Ticket'
-    }
+      ref: 'Ticket',
+    },
   },
   {
     toJSON: {
