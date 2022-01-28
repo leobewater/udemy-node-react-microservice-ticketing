@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import { OrderStatus } from '@mmb8npm/common';
 import { TicketDoc } from './ticket';
 
+// so we can use import OrderStatus from the models/order
+export { OrderStatus };
+
 // Typescript interfaces
 interface OrderAttrs {
   userId: string;
