@@ -1,2 +1,8 @@
 // mock the natsWrapper for Jest tests without connecting to the actual NATS server
-export const natsWrapper = {};
+export const natsWrapper = {
+  client: {
+    publish: (subject: string, data: string, callback: () => void) => {
+      callback();
+    },
+  },
+};
