@@ -37,3 +37,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: lcheung/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
