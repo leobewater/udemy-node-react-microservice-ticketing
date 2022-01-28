@@ -21,12 +21,16 @@ stan.on('connect', () => {
 
   // .setManualAckMode(true) - NATs no longer auto ackownledge the message was received.
   // if no acknowledge was recieved, after 30s it will publish again.
-  const options = stan.subscriptionOptions().setManualAckMode(true);
+  const options = stan
+    .subscriptionOptions()
+    .setManualAckMode(true) // manually acknowledge recieving the event
+    .setDeliverAllAvailable() // redeliver all events (don't use it alone)
+    .setDurableName('accounting-service'); // after acknowledge, NATs store this Name in the event history
 
   // listen to ticket:created topic/event with a Queue Group to avoid receiving duplicated message
   const subscription = stan.subscribe(
-    'ticket:created',
-    'orders-service-queue-group',
+    'ticket:created', // channel
+    'orders-service-queue-group', // queue group
     options
   );
 
@@ -43,7 +47,7 @@ stan.on('connect', () => {
   });
 });
 
-// there is a delay when listener process get terminated before fully shutdown. 
+// there is a delay when listener process get terminated before fully shutdown.
 // Adjust the heeartbeat value in the server config to minimize the delay.
 // handlers for interrupt/terminating the listener process to avoid missing messages/events
 process.on('SIGINT', () => stan.close());
