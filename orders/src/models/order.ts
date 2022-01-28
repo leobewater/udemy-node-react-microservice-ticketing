@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { OrderStatus } from '@mmb8npm/common';
+import { TicketDoc } from './ticket';
 
 // Typescript interfaces
 interface OrderAttrs {
@@ -30,6 +31,8 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
+      enum: Object.values(OrderStatus), // restrict the mongoose value
+      default: OrderStatus.Created,
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
