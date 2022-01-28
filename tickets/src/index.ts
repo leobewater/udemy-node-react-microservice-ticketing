@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
-import { randomBytes } from 'crypto';
 
 // connect mongo and start server
 // latest node must have an async function to start, await can't be at the top level
