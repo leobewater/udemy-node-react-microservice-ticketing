@@ -2,6 +2,9 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 
+// tell jest to use the mock file in the __mocks__ folder
+jest.mock('../nats-wrapper');
+
 let mongo: any;
 
 /*
