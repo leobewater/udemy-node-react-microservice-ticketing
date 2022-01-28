@@ -22,8 +22,8 @@ spec:
             '-hbi', '5s',
             '-hbt', '5s',
             '-hbf', '2',
-            '-SD', '-cid',
-            'ticketing'
+            '-SD', 
+            '-cid', 'ticketing'
           ]
 ---
 apiVersion: v1
