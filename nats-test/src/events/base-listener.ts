@@ -1,4 +1,4 @@
-// TS abstract class
+// Typescript abstract class
 import { Message, Stan } from 'node-nats-streaming';
 import { Subjects } from './subjects';
 
