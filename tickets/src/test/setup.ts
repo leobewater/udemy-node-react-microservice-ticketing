@@ -21,8 +21,10 @@ beforeAll(async () => {
   await mongoose.connect(mongoUri);
 });
 
-// delete all database collections before running each test
+// delete all database collections and jest mocks before running each test
 beforeEach(async () => {
+  jest.clearAllMocks();
+  
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {
