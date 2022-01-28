@@ -13,7 +13,13 @@ const stan = nats.connect('ticketing', clientId, {
 stan.on('connect', () => {
   console.log('Listener connected to NATS');
 
-  // .setManualAckMode(true) - NATs no longer auto ackownledge the message was received. 
+  // when disconnect/terminate
+  stan.on('close', () => {
+    console.log('NATS connection closed!');
+    process.exit();
+  });
+
+  // .setManualAckMode(true) - NATs no longer auto ackownledge the message was received.
   // if no acknowledge was recieved, after 30s it will publish again.
   const options = stan.subscriptionOptions().setManualAckMode(true);
 
@@ -34,6 +40,11 @@ stan.on('connect', () => {
 
     // manually acknowledge the message was received
     msg.ack();
-
   });
 });
+
+// there is a delay when listener process get terminated before fully shutdown. 
+// Adjust the heeartbeat value in the server config to minimize the delay.
+// handlers for interrupt/terminating the listener process to avoid missing messages/events
+process.on('SIGINT', () => stan.close());
+process.on('SIGTERM', () => stan.close());
