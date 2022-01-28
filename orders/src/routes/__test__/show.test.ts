@@ -4,7 +4,7 @@ import { app } from '../../app';
 import { Order, OrderStatus } from '../../models/order';
 import { Ticket } from '../../models/ticket';
 
-// TODO - add additonal test for unauthoriazation, order Id request validation etc.
+// TODO - add additonal test for authentication, order Id validation etc.
 
 it('fetches the order', async () => {
   // create a ticket
