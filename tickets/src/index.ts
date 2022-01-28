@@ -21,7 +21,6 @@ const start = async () => {
       randomBytes(4).toString('hex'),
       'http://nats-srv:4222'
     );
-    console.log('Connected to NATS Streaming');
 
     // using deployment host name and connect to auth db
     await mongoose.connect(process.env.MONGO_URI);
