@@ -33,6 +33,8 @@ route.put(
       throw new NotAuthorizedError();
     }
 
+    // TODO - use Database Transaction to make sure they both get created and dispatched.
+    
     // update the ticket
     ticket.set({
       title: req.body.title,
@@ -41,7 +43,7 @@ route.put(
     await ticket.save();
 
     // dispatch ticket updated event to NATS
-    await new TicketUpdatedPublisher(natsWrapper.client).publish({
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,

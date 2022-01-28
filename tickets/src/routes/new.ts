@@ -20,6 +20,7 @@ router.post(
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
 
+    // TODO - use Database Transaction to make sure they both get created and dispatched.
     // save ticket to mongodb
     const ticket = Ticket.build({
       title,
@@ -28,7 +29,7 @@ router.post(
     });
     await ticket.save();
 
-    // dispatch an event, please use the saved ticket properties as mongoose can't modify it via pre/post save hooks
+    // dispatch ticket created event, please use the saved ticket properties as mongoose can't modify it via pre/post save hooks
     await new TicketCreatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
