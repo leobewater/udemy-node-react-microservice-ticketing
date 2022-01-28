@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats-wrapper'; // jest will use the mock version
 
 it('returns a 404 if the provied id does not exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -96,4 +97,27 @@ it('updates the ticket provided valid inputs', async () => {
   expect(ticketResponse.body.title).toEqual('new title');
   expect(ticketResponse.body.price).toEqual(100);
   expect(ticketResponse.body.userId).toEqual(response.body.userId);
+});
+
+it('publishes an event', async () => {
+  const cookie = global.signin();
+
+  // create a ticket
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({ title: 'some title', price: 20 });
+
+  // edit as the same user who own the ticket with bad title
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'new title',
+      price: 100,
+    })
+    .expect(200);
+
+  // console.log(natsWrapper);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
