@@ -9,9 +9,19 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 
   async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
     // when received the order:created event, then queue a job to the Redis server for expiration
-    await expirationQueue.add({
-      orderId: data.id,
-    });
+
+    // calculate the different between the order.expiresAt time and now
+    const delay = new Date(data.expiresAt).getTime() - new Date().getTime();
+    console.log('Waiting this many milliseconds to process the job:', delay);
+
+    await expirationQueue.add(
+      {
+        orderId: data.id,
+      },
+      {
+        delay
+      }
+    );
 
     msg.ack();
   }
