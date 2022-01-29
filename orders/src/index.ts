@@ -3,6 +3,7 @@ import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
 import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
 import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
+import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener';
 
 // connect mongo and start server
 // latest node must have an async function to start, await can't be at the top level
@@ -42,6 +43,7 @@ const start = async () => {
     // set up event listeners
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdatedListener(natsWrapper.client).listen();
+    new ExpirationCompleteListener(natsWrapper.client).listen();
 
     // using deployment host name and connect to auth db
     await mongoose.connect(process.env.MONGO_URI);
