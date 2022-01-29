@@ -5,6 +5,7 @@ import {
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
+  BadRequestError,
 } from '@mmb8npm/common';
 import { Ticket } from '../models/ticket';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
@@ -18,7 +19,9 @@ route.put(
   [
     body('title').trim().notEmpty().withMessage('Title is required'),
 
-    body('price').isFloat({ gt: 0 }).withMessage('Price must be greater than 0'),
+    body('price')
+      .isFloat({ gt: 0 })
+      .withMessage('Price must be greater than 0'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -26,6 +29,11 @@ route.put(
 
     if (!ticket) {
       throw new NotFoundError();
+    }
+
+    // check if the ticket is already reserved and not editable
+    if (ticket.orderId) {
+      throw new BadRequestError('Cannot edit a reserved ticket');
     }
 
     // check ticket userId with the logged current user id
