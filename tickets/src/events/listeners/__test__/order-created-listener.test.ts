@@ -69,4 +69,15 @@ it('publishes a ticket updated event after order is created', async () => {
 
   // write assertions to make sure ack() function is called
   expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+  // @ts-ignore
+  // console.log(natsWrapper.client.publish.mock.calls[0][1]);
+
+  // avoid Typescript warning similar to above usage
+  const ticketUpdatedData = JSON.parse(
+    (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
+  );
+
+  // verify the saved ticket's orderId
+  expect(ticketUpdatedData.orderId).toEqual(data.id);
 });
