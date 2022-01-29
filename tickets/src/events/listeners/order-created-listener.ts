@@ -6,28 +6,29 @@ import {
 } from '@mmb8npm/common';
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
+import { Ticket } from '../../models/ticket';
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   readonly subject: Subjects.OrderCreated = Subjects.OrderCreated;
   readonly queueGroupName = queueGroupName;
 
+  // reserve the ticket by saving the order id to the ticket
   async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
-    const {} = data; 
-    // reserving the ticket
-    // need to lock down the ticket after an order is created so no more changes can be made
-    // ticket and order has one-to-one relationship
-    // save orderID to ticket instead of saving the locked flag
+    // find the ticket that the order is reserving
+    const ticket = await Ticket.findById(data.ticket.id);
 
-    // {
-    //   id: string;
-    //   version: number;
-    //   status: OrderStatus;
-    //   userId: string;
-    //   expiresAt: string;
-    //   ticket: {
-    //     id: string;
-    //     price: number;
-    //   }
-    // }
+    // if no ticket, throw error
+    if (!ticket) {
+      throw new Error('Ticket not found');
+    }
+
+    // mark the ticket as being reserved by setting its orderId perperty
+    ticket.set({ orderId: data.id });
+
+    // save the ticket
+    await ticket.save();
+
+    // ack the message
+    msg.ack();
   }
 }
