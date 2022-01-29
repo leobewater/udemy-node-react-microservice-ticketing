@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
+// Typescript interfaces
 interface TicketAttrs {
   title: string;
   price: number;
@@ -10,7 +12,7 @@ interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
   userId: string;
-  // createAt: string;
+  version: number;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -41,6 +43,10 @@ const ticketSchema = new mongoose.Schema(
     },
   }
 );
+
+// tell mongoose to set/track the version to avoid out of order concurrency issues
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 // add build function accept TicketAttrs and returns TicketDoc type
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
