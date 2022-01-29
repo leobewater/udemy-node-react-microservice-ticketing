@@ -34,7 +34,7 @@ router.get(
       throw new NotFoundError();
     }
 
-    if (order.userId != req.currentUser!.id) {
+    if (order.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
     }
 
