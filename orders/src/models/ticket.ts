@@ -4,6 +4,7 @@ import { Order, OrderStatus } from '../models/order';
 // duplicated model from Ticket service.
 // DON'T put this in the Common library since it's slight different than Tickets Service -> Ticket Model.
 interface TicketAttrs {
+  id: string; // foreign Ticket ID
   title: string;
   price: number;
 }
@@ -41,8 +42,13 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
+// override mongodb doc "_id" with the received foreign Ticket Id.
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs);
+  return new Ticket({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price,
+  });
 };
 
 ticketSchema.methods.isReserved = async function () {
