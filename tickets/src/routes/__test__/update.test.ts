@@ -3,6 +3,7 @@ import { app } from '../../app';
 import mongoose from 'mongoose';
 import { natsWrapper } from '../../nats-wrapper'; // jest will use the mock version
 import { Subjects } from '@mmb8npm/common';
+import { Ticket } from '../../models/ticket';
 
 it('returns a 404 if the provied id does not exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -128,4 +129,29 @@ it('publishes an event', async () => {
     expect.anything(),
     expect.anything()
   );
+});
+
+it('rejects updates if the ticket is reserved', async () => {
+  const cookie = global.signin();
+
+  // create a ticket
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({ title: 'some title', price: 20 });
+
+  // manually add orderID to the new ticket
+  const ticket = await Ticket.findById(response.body.id);
+  ticket!.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+  await ticket!.save();
+
+  // ticket is already reserved and try to edit it
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'new title',
+      price: 100,
+    })
+    .expect(400);
 });
