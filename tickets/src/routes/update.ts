@@ -43,7 +43,7 @@ route.put(
     await ticket.save();
 
     // dispatch ticket updated event to NATS
-    new TicketUpdatedPublisher(natsWrapper.client).publish({
+    await new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
