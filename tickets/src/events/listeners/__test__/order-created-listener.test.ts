@@ -60,3 +60,13 @@ it('acknowledges the message', async () => {
   // write assertions to make sure ack() function is called
   expect(msg.ack).toHaveBeenCalled();
 });
+
+it('publishes a ticket updated event after order is created', async () => {
+  const { listener, data, msg, ticket } = await setup();
+
+  // call the onMessage function with the data object + message object
+  await listener.onMessage(data, msg);
+
+  // write assertions to make sure ack() function is called
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
