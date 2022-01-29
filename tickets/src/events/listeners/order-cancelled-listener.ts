@@ -17,7 +17,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     }
 
     // remove orderId from ticket to release the reservation lock
-    ticket.set({ orderid: null });
+    ticket.set({ orderId: null });
     await ticket.save();
 
     // dispatch ticket updated event
