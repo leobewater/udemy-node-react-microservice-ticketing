@@ -16,9 +16,9 @@ route.put(
   '/api/tickets/:id',
   requireAuth,
   [
-    body('title').trim().not().isEmpty().withMessage('Title is required'),
+    body('title').trim().notEmpty().withMessage('Title is required'),
 
-    body('price').isFloat({ gt: 0 }).withMessage('Price must be great than 0'),
+    body('price').isFloat({ gt: 0 }).withMessage('Price must be greater than 0'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {

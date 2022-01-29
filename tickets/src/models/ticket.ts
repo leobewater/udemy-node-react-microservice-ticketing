@@ -48,6 +48,17 @@ const ticketSchema = new mongoose.Schema(
 ticketSchema.set('versionKey', 'version');
 ticketSchema.plugin(updateIfCurrentPlugin);
 
+// update the version number using the pre-save hook instead of using the plugin mongoose-update-if-current
+// but in the update route, need to manually add the version: version + 1 in the save payload
+// ticketSchema.pre('save', function (done) {
+//   // @ts-ignore
+//   this.$where = {
+//     version: this.get('version') - 1,
+//   };
+
+//   done();
+// });
+
 // add build function accept TicketAttrs and returns TicketDoc type
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket(attrs);
