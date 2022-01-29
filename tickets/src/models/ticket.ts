@@ -44,7 +44,7 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
-// tell mongoose to set/track the version to avoid out of order concurrency issues
+// tell mongoose to set/track the Ticket version to avoid out of order concurrency issues
 ticketSchema.set('versionKey', 'version');
 ticketSchema.plugin(updateIfCurrentPlugin);
 
