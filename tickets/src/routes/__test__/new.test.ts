@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 import { natsWrapper } from '../../nats-wrapper'; // jest will use the mock version
+import { Subjects } from '@mmb8npm/common';
 
 it('has a route handler listening to /api/tickets for post requests', async () => {
   const response = await request(app).post('/api/tickets').send({});
@@ -114,5 +115,12 @@ it('publishes an event', async () => {
     .expect(201);
 
     // console.log(natsWrapper);
-    expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+  // check with dispatched content of the event
+  // expect(natsWrapper.client.publish).toHaveBeenCalled();
+  expect(natsWrapper.client.publish).toHaveBeenLastCalledWith(
+    Subjects.TicketCreated,
+    expect.anything(),
+    expect.anything()
+  );
 });

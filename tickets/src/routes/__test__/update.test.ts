@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
 import { natsWrapper } from '../../nats-wrapper'; // jest will use the mock version
+import { Subjects } from '@mmb8npm/common';
 
 it('returns a 404 if the provied id does not exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -119,5 +120,12 @@ it('publishes an event', async () => {
     .expect(200);
 
   // console.log(natsWrapper);
-  expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+  // check with dispatched content of the event
+  // expect(natsWrapper.client.publish).toHaveBeenCalled();
+  expect(natsWrapper.client.publish).toHaveBeenLastCalledWith(
+    Subjects.TicketUpdated,
+    expect.anything(),
+    expect.anything()
+  );
 });
