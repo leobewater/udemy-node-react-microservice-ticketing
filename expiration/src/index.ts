@@ -11,6 +11,9 @@ const start = async () => {
   if (!process.env.NATS_CLUSTER_ID) {
     throw new Error('NATS_CLUSTER_ID must be defined');
   }
+  if (!process.env.REDIS_HOST) {
+    throw new Error('REDIS_HOST must be defined');
+  }
   
   try {
     await natsWrapper.connect(
