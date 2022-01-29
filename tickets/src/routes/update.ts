@@ -34,7 +34,7 @@ route.put(
     }
 
     // TODO - use Database Transaction to make sure they both get created and dispatched.
-    
+
     // update the ticket
     ticket.set({
       title: req.body.title,
@@ -45,6 +45,7 @@ route.put(
     // dispatch ticket updated event to NATS
     await new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
+      version: ticket.version,
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,

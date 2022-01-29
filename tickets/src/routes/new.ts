@@ -32,6 +32,7 @@ router.post(
     // dispatch ticket created event, please use the saved ticket properties as mongoose can't modify it via pre/post save hooks
     await new TicketCreatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
+      version: ticket.version,
       title: ticket.title,
       price: ticket.price, 
       userId: ticket.userId,
