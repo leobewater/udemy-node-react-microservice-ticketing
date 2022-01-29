@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { OrderStatus } from '@mmb8npm/common';
 import { TicketDoc } from './ticket';
 
@@ -55,6 +56,10 @@ const orderSchema = new mongoose.Schema(
     },
   }
 );
+
+// override the mongoose __v with version and use plugin to increment the version number
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(updateIfCurrentPlugin);
 
 // add build function accept OrderAttrs and returns OrderDoc type
 orderSchema.statics.build = (attrs: OrderAttrs) => {
