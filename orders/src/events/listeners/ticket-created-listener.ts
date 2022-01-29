@@ -1,5 +1,5 @@
 import { Message } from 'node-nats-streaming';
-import { Listener, Subjects, TicketCreatedEvent } from '@mmb8npm/common';
+import { Listener, TicketCreatedEvent, Subjects } from '@mmb8npm/common';
 import { Ticket } from '../../models/ticket';
 import { queueGroupName } from './queue-group-name';
 
