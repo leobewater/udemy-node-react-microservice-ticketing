@@ -59,3 +59,17 @@ it('acks the mssage', async () => {
   // write assertions to make sure ack() function is called
   expect(msg.ack).toHaveBeenCalled();
 });
+
+it('does not call ack if the event has a skipped version or future version', async () => {
+  const { listener, data, msg, ticket } = await setup();
+
+  // modify the data version to simulate out-of-sync version
+  data.version = 10;
+
+  // call the onMessage function with the data object + message object
+  try {
+    await listener.onMessage(data, msg);
+  } catch (err) {}
+
+  expect(msg.ack).not.toHaveBeenCalled();
+});
