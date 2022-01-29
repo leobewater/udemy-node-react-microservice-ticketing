@@ -3,6 +3,8 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Order, OrderStatus } from '../../models/order';
 import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../nats-wrapper'; // jest will replace with mock version
+import { Subjects } from '@mmb8npm/common';
 
 // TODO - add additional request body validation, authenciation, event, order content tests (look at tickets service)
 
@@ -59,4 +61,26 @@ it('reserves a ticket', async () => {
     .expect(201);
 });
 
-it.todo('emits an order created event');
+it('emits an order created event', async () => {
+  // create a ticket and save to db
+  const ticket = Ticket.build({
+    title: 'concern',
+    price: 20,
+  });
+  await ticket.save();
+
+  // create new order
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+  // check with dispatched content of the event
+  // expect(natsWrapper.client.publish).toHaveBeenCalled();
+  expect(natsWrapper.client.publish).toHaveBeenLastCalledWith(
+    Subjects.OrderCreated,
+    expect.anything(),
+    expect.anything()
+  );
+});
