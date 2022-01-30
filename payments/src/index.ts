@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
 import { natsWrapper } from './nats-wrapper';
 
 // connect mongo and start server
@@ -38,6 +39,8 @@ const start = async () => {
     process.on('SIGTERM', () => natsWrapper.client.close());
 
     // init listeners
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCreatedListener(natsWrapper.client).listen();
 
     // using deployment host name and connect to auth db
     await mongoose.connect(process.env.MONGO_URI);
