@@ -48,7 +48,6 @@ const paymentSchema = new mongoose.Schema(
 
 paymentSchema.statics.build = (attrs: PaymentAttrs) => {
   return new Payment({
-    _id: attrs.id,
     orderId: attrs.orderId,
     stripeId: attrs.stripeId,
   });
