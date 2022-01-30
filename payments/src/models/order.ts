@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { OrderStatus } from '@mmb8npm/common';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 // Typescript interfaces
 interface OrderAttrs {
@@ -46,6 +47,10 @@ const orderSchema = new mongoose.Schema(
     },
   }
 );
+
+// override the mongoose __v with version and use plugin to increment the version number
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order({
