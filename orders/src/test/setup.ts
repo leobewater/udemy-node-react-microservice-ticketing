@@ -34,8 +34,8 @@ beforeEach(async () => {
 
 // stop mongodb after running all tests
 afterAll(async () => {
-  await mongo.stop();
   await mongoose.connection.close();
+  await mongo.stop();
 });
 
 /*
