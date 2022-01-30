@@ -24,7 +24,7 @@ beforeAll(async () => {
 // delete all database collections and jest mocks before running each test
 beforeEach(async () => {
   jest.clearAllMocks();
-  
+
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {
@@ -42,15 +42,16 @@ afterAll(async () => {
  * Global Test Functions
  */
 declare global {
-  var signin: () => string[];
+  var signin: (id?: string) => string[];
 }
 
-global.signin = () => {
+// accept optional id as parameter
+global.signin = (id?: string) => {
   // Create a fake cookie, for reference, you can signup and find the currentUser cookie response
 
   // Build a JWT payload and randomly generate the id. { id, email }
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com',
   };
 
