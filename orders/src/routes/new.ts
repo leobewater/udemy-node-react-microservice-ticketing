@@ -15,7 +15,7 @@ import { natsWrapper } from '../nats-wrapper';
 const router = express.Router();
 
 // ticket expires in 15 mins or move it to env var, different time for other user roles
-const EXPIRATION_WINDOW_SECONDS = 1 * 60;
+const EXPIRATION_WINDOW_SECONDS = 3 * 60;
 
 router.post(
   '/api/orders',
