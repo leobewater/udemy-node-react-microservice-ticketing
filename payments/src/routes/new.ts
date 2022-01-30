@@ -9,6 +9,7 @@ import {
   OrderStatus,
 } from '@mmb8npm/common';
 import { Order } from '../models/order';
+import { Payment } from '../models/payment';
 import { stripe } from '../stripe';
 
 const router = express.Router();
@@ -39,14 +40,23 @@ router.post(
 
     console.log(`Charging Stripe Payment for Order ID: ${orderId}`);
 
-    // TODO - need better error handling
+    // TODO - need better error handling if stripe charges failed
+
     // charge the payment via Stripe but no customer information associated with the payment
-    await stripe.charges.create({
+    const charge = await stripe.charges.create({
       amount: order.price * 100,
       currency: 'usd',
       source: token,
       description: `Microservice Test Charge Order ID: ${orderId}`,
     });
+
+    // save orderId and stripeId to DB collection
+    const payment = Payment.build({
+      orderId: orderId,
+      stripeId: charge.id,
+    });
+    await payment.save();
+
 
     res.status(201).send({ success: true });
   }
