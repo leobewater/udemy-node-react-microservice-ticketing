@@ -17,6 +17,7 @@ router.post(
     body('token').notEmpty().withMessage('Token is required'),
     body('orderId').notEmpty().withMessage('Order Id is required'),
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
     res.send({ succes: true });
   }
