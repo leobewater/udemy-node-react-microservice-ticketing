@@ -113,3 +113,5 @@ it('returns a 201 with valid inputs', async () => {
   expect(payment).not.toBeNull();
 });
 
+// TODO - add test to test payment:created event
+

@@ -11,6 +11,8 @@ import {
 import { Order } from '../models/order';
 import { Payment } from '../models/payment';
 import { stripe } from '../stripe';
+import { PaymentCreatedPublisher } from '../events/publishers/payment-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -57,8 +59,15 @@ router.post(
     });
     await payment.save();
 
+    // dispatch a payment:created event. Best partice to take the data just saved due to hooks
+    // no need to have the await so the route returns the reposense right away and in the meantime dispatching the event
+    new PaymentCreatedPublisher(natsWrapper.client).publish({
+      id: payment.id,
+      orderId: payment.orderId,
+      stripeId: payment.stripeId,
+    });
 
-    res.status(201).send({ success: true });
+    res.status(201).send({ id: payment.id });
   }
 );
 
