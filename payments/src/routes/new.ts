@@ -37,9 +37,9 @@ router.post(
       throw new BadRequestError('Cannot pay for an cancelled order');
     }
 
-    console.log("Going to Charge Payment now");
+    console.log(`Charging Stripe Payment for Order ID: ${orderId}`);
 
-    // charge the payment via Stripe
+    // charge the payment via Stripe but no customer information associated with the payment
     await stripe.charges.create({
       amount: order.price * 100,
       currency: 'usd',
@@ -47,7 +47,7 @@ router.post(
       description: `Microservice Test Charge Order ID: ${orderId}`,
     });
 
-    res.send({ success: true });
+    res.status(201).send({ success: true });
   }
 );
 
