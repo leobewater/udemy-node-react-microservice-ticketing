@@ -5,6 +5,9 @@ import jwt from 'jsonwebtoken';
 // tell jest to use the mock file in the __mocks__ folder
 jest.mock('../nats-wrapper');
 
+// stripe test key
+process.env.STRIPE_KEY = 'sk_test_8u1uYNfQ94Vym28nQFbUOpLt';
+
 let mongo: any;
 
 /*
@@ -34,8 +37,8 @@ beforeEach(async () => {
 
 // stop mongodb after running all tests
 afterAll(async () => {
-  await mongo.stop();
   await mongoose.connection.close();
+  await mongo.stop();
 });
 
 /*
