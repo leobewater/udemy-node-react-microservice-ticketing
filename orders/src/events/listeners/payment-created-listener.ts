@@ -28,6 +28,9 @@ export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
     order.set({ status: OrderStatus.Complete });
     await order.save();
 
+    // NOTE: it also increment the order.version, order not going to be updated again
+    // so you may not need to publish the order updated event
+
     msg.ack();
   }
 }
