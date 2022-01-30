@@ -14,7 +14,8 @@ const NewTicket = () => {
       price,
     },
     onSuccess: (ticket) => {
-      console.log(ticket);
+      // console.log(ticket);
+      Router.push('/');
     },
   });
 
