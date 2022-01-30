@@ -39,6 +39,7 @@ router.post(
 
     console.log(`Charging Stripe Payment for Order ID: ${orderId}`);
 
+    // TODO - need better error handling
     // charge the payment via Stripe but no customer information associated with the payment
     await stripe.charges.create({
       amount: order.price * 100,
