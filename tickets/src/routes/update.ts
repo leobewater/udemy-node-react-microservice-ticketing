@@ -51,7 +51,7 @@ route.put(
     await ticket.save();
 
     // dispatch ticket updated event to NATS
-    await new TicketUpdatedPublisher(natsWrapper.client).publish({
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       version: ticket.version,
       title: ticket.title,
