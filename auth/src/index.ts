@@ -4,6 +4,8 @@ import { app } from './app';
 // connect mongo and start server
 // latest node must have an async function to start, await can't be at the top level
 const start = async () => {
+  console.log("Starting up...");
+  
   // check env vars existence
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined');
