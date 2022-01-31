@@ -1,10 +1,20 @@
+import Link from 'next/link';
+
 const LandingPage = ({ currentUser, tickets }) => {
   // console.log(tickets);
 
-  const ticketList = tickets.map(ticket => {
+  const ticketList = tickets.map((ticket) => {
     return (
-      <tr key={ticket.id}><td>{ticket.title}</td><td>${ticket.price}</td></tr>
-    )
+      <tr key={ticket.id}>
+        <td>{ticket.title}</td>
+        <td>${ticket.price}</td>
+        <td>
+          <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
+            <a>View</a>
+          </Link>
+        </td>
+      </tr>
+    );
   });
   return (
     <div>
@@ -14,11 +24,10 @@ const LandingPage = ({ currentUser, tickets }) => {
           <tr>
             <th>Title</th>
             <th>Price</th>
+            <th>Link</th>
           </tr>
         </thead>
-        <tbody>
-          {ticketList}
-        </tbody>
+        <tbody>{ticketList}</tbody>
       </table>
     </div>
   );
