@@ -9,7 +9,7 @@ import { PaymentCreatedListener } from './events/listeners/payment-created-liste
 // connect mongo and start server
 // latest node must have an async function to start, await can't be at the top level
 const start = async () => {
-  console.log("Starting Orders Service");
+  console.log("Starting Orders Service...");
   
   // check env vars existence
   if (!process.env.JWT_KEY) {
