@@ -15,8 +15,7 @@ export default ({ req }) => {
   } else {
     // we are on the browser! requests can be made without url domain name
     return axios.create({
-      baseURL: '/',
+      baseUrl: '/',
     });
   }
-  return {};
 };
