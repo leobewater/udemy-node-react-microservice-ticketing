@@ -10,7 +10,7 @@ it('responds with details about the current user', async () => {
     .get('/api/users/currentuser')
     .set('Cookie', cookie)
     .send()
-    .expect(400);
+    .expect(200);
 
   // console.log(response.body); // { currentUser: null }
 
